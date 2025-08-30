@@ -204,7 +204,7 @@ const Profile = () => {
         ) {
           const data = res?.data?.data;
           setProfileData(data);
-          setPreviewImage(appConstants?.imageUrl + data?.profileImage);
+          // setPreviewImage(appConstants?.imageUrl + data?.profileImage);
         } else {
           console.log("No data found for Blog Count.");
           setProfileData({});

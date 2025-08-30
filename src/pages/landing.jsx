@@ -170,8 +170,40 @@ const Land = () => {
       });
   };
 
+  const [profileData, setProfileData] = useState({});
+
+  const getProfileData = () => {
+    apiFunctions
+      .getProfile()
+      .then((res) => {
+        // console.log("Initial Response ~ getProfile", res);
+        if (
+          res?.status === 200 &&
+          res?.data &&
+          Object.keys(res.data).length > 0
+        ) {
+          const data = res?.data?.data;
+          setProfileData(data);
+          // setPreviewImage(appConstants?.imageUrl + data?.profileImage);
+        } else {
+          console.log("No data found for Blog Count.");
+          setProfileData({});
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching Blog Count Data:", err);
+        setProfileData({});
+      });
+  };
+
+  const isFetched = useRef(false);
+
   useEffect(() => {
-    getAgentData();
+    if (!isFetched.current) {
+      getProfileData();
+      getAgentData();
+      isFetched.current = true;
+    }
   }, []);
 
   // ----------------- Verify Token Once -----------------
@@ -224,8 +256,9 @@ const Land = () => {
                     cursor: "pointer",
                   }}
                   onClick={handleClick}
+                  src={appConstants?.imageUrl + profileData?.profileImage}
                 >
-                  A
+                  {profileData?.username?.charAt(0).toUpperCase()}
                 </Avatar>
 
                 <Menu

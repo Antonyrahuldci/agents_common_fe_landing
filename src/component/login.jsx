@@ -123,7 +123,7 @@ const Login = () => {
       // console.log("response", res);
 
       if (res?.status === 200 && res?.data?.token) {
-        showSnackbar("Login successful!", "success");
+        showSnackbar("Login successfully!", "success");
 
         // // ✅ Decrypt the token
         // const decryptedBytes = CryptoJS.AES.decrypt(
