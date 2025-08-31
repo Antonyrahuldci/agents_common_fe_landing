@@ -2,6 +2,7 @@ import method from "./method";
 const apiFunctions = {
   getagents: () => method.get("api/v1/agents"),
   userLogin: (payload) => method.post("api/v1/login", payload),
+  socialLogin: (payload) => method.post("api/v1/sociallogin", payload),
   logout: (payload) => method.post("api/v1/logout", payload),
   userRegister: (payload) => method.post("api/v1/register", payload),
   verifyEmail: (payload) => method.get(`/api/v1/verify/${payload}`),
@@ -10,6 +11,9 @@ const apiFunctions = {
   updateProfile: (payload) =>
     method.put("api/v1/update-profile", payload, true),
 
+  
+  
+  
   addevent: (payload) => method.post(`calendar/`, payload),
   updateevent: (payload) => method.put(`calendar/`, payload),
   getCalenderData: () => method.get(`calendar/`),

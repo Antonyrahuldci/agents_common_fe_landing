@@ -150,13 +150,15 @@ const Profile = () => {
     }
 
     setIsLoading(true);
+    // console.log("updateeeee");
+
     const formDataPayLoad = new FormData();
     // Profile image
     if (file) {
       formDataPayLoad.append("profileImage", file);
     }
     // Optional password update
-    if (formData.currentpassword) {
+    if (profileData.auth_type === "normal" && formData.currentpassword) {
       formDataPayLoad.append("currentPassword", formData.currentpassword);
     }
     if (formData.newpassword) {
@@ -171,7 +173,7 @@ const Profile = () => {
     apiFunctions
       .updateProfile(formDataPayLoad)
       .then((res) => {
-        console.log("response", res);
+        // console.log("response", res);
 
         if (res?.status === 200 && res?.data) {
           showSnackbar("Profile Updated successfully!", "success");
@@ -191,12 +193,11 @@ const Profile = () => {
       })
       .finally(() => setIsLoading(false));
   };
-
   const getProfileData = () => {
     apiFunctions
       .getProfile()
       .then((res) => {
-        console.log("Initial Response ~ getProfile", res);
+        // console.log("Initial Response ~ getProfile", res);
         if (
           res?.status === 200 &&
           res?.data &&
@@ -204,6 +205,7 @@ const Profile = () => {
         ) {
           const data = res?.data?.data;
           setProfileData(data);
+
           // setPreviewImage(appConstants?.imageUrl + data?.profileImage);
         } else {
           console.log("No data found for Blog Count.");
@@ -234,6 +236,23 @@ const Profile = () => {
       mirror: true, // trigger "out" animation when scrolling back up
     });
   }, []);
+
+  const getProfileImage = () => {
+    if (previewImage) return previewImage;
+
+    if (profileData?.profileImage) {
+      // If the image comes from Google, use it directly
+      if (profileData.profileImage.includes("googleusercontent.com")) {
+        return profileData.profileImage;
+      }
+      // Otherwise prefix with your app constant
+      return appConstants?.imageUrl + profileData.profileImage;
+    }
+
+    // fallback image
+    return user;
+  };
+
   return (
     <>
       <div className="container-fluid  px-lg-0 Login_hero overflow-hidden p-0 m-0">
@@ -368,15 +387,7 @@ const Profile = () => {
                   </div>
                   <div className="jesica-img-card text-center">
                     <div className="jesica-img">
-                      <img
-                        src={
-                          previewImage ||
-                          (profileData?.profileImage
-                            ? appConstants?.imageUrl + profileData.profileImage
-                            : user)
-                        }
-                        alt="profile"
-                      />
+                      <img src={getProfileImage()} alt="profile" />
 
                       <div
                         className="EditIcon"
@@ -461,157 +472,245 @@ const Profile = () => {
                   </div>
 
                   {/* Current Password */}
-                  <label className="Login_label mt-4"> Current Password</label>
-                  <div className="Login_input-group-1 mt-2">
-                    <span className="Login_input-icon" aria-hidden="true">
-                      {/* Key icon stays the same */}
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
+                  {profileData?.auth_type == "normal" && (
+                    <>
+                      <label className="Login_label mt-4">
+                        {" "}
+                        Current Password
+                      </label>
+                      <div className="Login_input-group-1 mt-2">
+                        <span className="Login_input-icon" aria-hidden="true">
+                          {/* Key icon stays the same */}
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
+                            />
+                          </svg>
+                        </span>
+
+                        <input
+                          name="currentpassword"
+                          value={formData?.currentpassword || ""}
+                          onChange={handleInputChange}
+                          type={showPassword ? "text" : "password"}
+                          className="Login_input-field"
+                          placeholder="Enter Your Password"
+                          autoComplete="new-password"
                         />
-                      </svg>
-                    </span>
 
-                    <input
-                      name="currentpassword"
-                      value={formData?.currentpassword || ""}
-                      onChange={handleInputChange}
-                      type={showPassword ? "text" : "password"}
-                      className="Login_input-field"
-                      placeholder="Enter Your Password"
-                      autoComplete="new-password"
-                    />
+                        <button
+                          type="button"
+                          className="Login_toggle-button"
+                          aria-label={
+                            showPassword ? "Hide password" : "Show password"
+                          }
+                          onClick={() => setShowPassword((v) => !v)}
+                        >
+                          {showPassword ? (
+                            // Eye-off (you can keep your previous if you want)
+                            <svg
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                              />
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                              />
+                            </svg>
+                          ) : (
+                            // New Eye-close icon
+                            <svg
+                              viewBox="0 0 22 20"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                              stroke="currentColor"
+                            >
+                              <path
+                                d="M9.58665 3.09232C9.99315 3.03223 10.4123 3 10.8441 3C15.9491 3 19.299 7.50484 20.4244 9.2868C20.5606 9.5025 20.6287 9.6103 20.6668 9.7767C20.6955 9.9016 20.6954 10.0987 20.6668 10.2236C20.6286 10.3899 20.5601 10.4985 20.4229 10.7156C20.123 11.1901 19.6659 11.8571 19.0602 12.5805M5.56807 4.71504C3.406 6.1817 1.9382 8.2194 1.26486 9.2853C1.12803 9.5019 1.05962 9.6102 1.02149 9.7765C0.992848 9.9014 0.992837 10.0984 1.02146 10.2234C1.05958 10.3897 1.12768 10.4975 1.26388 10.7132C2.38929 12.4952 5.73916 17 10.8441 17C12.9025 17 14.6756 16.2676 16.1325 15.2766M1.84417 1L19.8441 19M8.72285 7.87868C8.17995 8.4216 7.84417 9.1716 7.84417 10C7.84417 11.6569 9.18735 13 10.8441 13C11.6725 13 12.4225 12.6642 12.9654 12.1213"
+                                stroke="white"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          )}
+                        </button>
+                      </div>
+                      {/* New Password */}
+                      <label className="Login_label mt-4">New Password</label>
+                      <div className="Login_input-group-1 mt-2">
+                        <span className="Login_input-icon" aria-hidden="true">
+                          {/* Key icon stays the same */}
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
+                            />
+                          </svg>
+                        </span>
 
-                    <button
-                      type="button"
-                      className="Login_toggle-button"
-                      aria-label={
-                        showPassword ? "Hide password" : "Show password"
-                      }
-                      onClick={() => setShowPassword((v) => !v)}
-                    >
-                      {showPassword ? (
-                        // Eye-off (you can keep your previous if you want)
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                          />
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                          />
-                        </svg>
-                      ) : (
-                        // New Eye-close icon
-                        <svg
-                          viewBox="0 0 22 20"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                          stroke="currentColor"
-                        >
-                          <path
-                            d="M9.58665 3.09232C9.99315 3.03223 10.4123 3 10.8441 3C15.9491 3 19.299 7.50484 20.4244 9.2868C20.5606 9.5025 20.6287 9.6103 20.6668 9.7767C20.6955 9.9016 20.6954 10.0987 20.6668 10.2236C20.6286 10.3899 20.5601 10.4985 20.4229 10.7156C20.123 11.1901 19.6659 11.8571 19.0602 12.5805M5.56807 4.71504C3.406 6.1817 1.9382 8.2194 1.26486 9.2853C1.12803 9.5019 1.05962 9.6102 1.02149 9.7765C0.992848 9.9014 0.992837 10.0984 1.02146 10.2234C1.05958 10.3897 1.12768 10.4975 1.26388 10.7132C2.38929 12.4952 5.73916 17 10.8441 17C12.9025 17 14.6756 16.2676 16.1325 15.2766M1.84417 1L19.8441 19M8.72285 7.87868C8.17995 8.4216 7.84417 9.1716 7.84417 10C7.84417 11.6569 9.18735 13 10.8441 13C11.6725 13 12.4225 12.6642 12.9654 12.1213"
-                            stroke="white"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      )}
-                    </button>
-                  </div>
-                  {/* New Password */}
-                  <label className="Login_label mt-4">New Password</label>
-                  <div className="Login_input-group-1 mt-2">
-                    <span className="Login_input-icon" aria-hidden="true">
-                      {/* Key icon stays the same */}
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
+                        <input
+                          name="newpassword"
+                          value={formData?.newpassword || ""}
+                          onChange={handleInputChange}
+                          type={showPassword2 ? "text" : "password"}
+                          className="Login_input-field"
+                          placeholder="Enter Your Password"
+                          autoComplete="new-password"
                         />
-                      </svg>
-                    </span>
 
-                    <input
-                      name="newpassword"
-                      value={formData?.newpassword || ""}
-                      onChange={handleInputChange}
-                      type={showPassword2 ? "text" : "password"}
-                      className="Login_input-field"
-                      placeholder="Enter Your Password"
-                      autoComplete="new-password"
-                    />
+                        <button
+                          type="button"
+                          className="Login_toggle-button"
+                          aria-label={
+                            showPassword2 ? "Hide password" : "Show password"
+                          }
+                          onClick={() => setShowPassword2((v) => !v)}
+                        >
+                          {showPassword2 ? (
+                            // Eye-off (you can keep your previous if you want)
+                            <svg
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                              />
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                              />
+                            </svg>
+                          ) : (
+                            // New Eye-close icon
+                            <svg
+                              viewBox="0 0 22 20"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                              stroke="currentColor"
+                            >
+                              <path
+                                d="M9.58665 3.09232C9.99315 3.03223 10.4123 3 10.8441 3C15.9491 3 19.299 7.50484 20.4244 9.2868C20.5606 9.5025 20.6287 9.6103 20.6668 9.7767C20.6955 9.9016 20.6954 10.0987 20.6668 10.2236C20.6286 10.3899 20.5601 10.4985 20.4229 10.7156C20.123 11.1901 19.6659 11.8571 19.0602 12.5805M5.56807 4.71504C3.406 6.1817 1.9382 8.2194 1.26486 9.2853C1.12803 9.5019 1.05962 9.6102 1.02149 9.7765C0.992848 9.9014 0.992837 10.0984 1.02146 10.2234C1.05958 10.3897 1.12768 10.4975 1.26388 10.7132C2.38929 12.4952 5.73916 17 10.8441 17C12.9025 17 14.6756 16.2676 16.1325 15.2766M1.84417 1L19.8441 19M8.72285 7.87868C8.17995 8.4216 7.84417 9.1716 7.84417 10C7.84417 11.6569 9.18735 13 10.8441 13C11.6725 13 12.4225 12.6642 12.9654 12.1213"
+                                stroke="white"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          )}
+                        </button>
+                      </div>
+                    </>
+                  )}
+                  {/* Set Password */}
+                  {profileData?.auth_type !== "normal" && (
+                    <>
+                      <label className="Login_label mt-4">Set Password</label>
+                      <div className="Login_input-group-1 mt-2">
+                        <span className="Login_input-icon" aria-hidden="true">
+                          {/* Key icon stays the same */}
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
+                            />
+                          </svg>
+                        </span>
 
-                    <button
-                      type="button"
-                      className="Login_toggle-button"
-                      aria-label={
-                        showPassword2 ? "Hide password" : "Show password"
-                      }
-                      onClick={() => setShowPassword2((v) => !v)}
-                    >
-                      {showPassword2 ? (
-                        // Eye-off (you can keep your previous if you want)
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
+                        <input
+                          name="newpassword"
+                          value={formData?.newpassword || ""}
+                          onChange={handleInputChange}
+                          type={showPassword2 ? "text" : "password"}
+                          className="Login_input-field"
+                          placeholder="Enter Your Password"
+                          autoComplete="new-password"
+                        />
+
+                        <button
+                          type="button"
+                          className="Login_toggle-button"
+                          aria-label={
+                            showPassword2 ? "Hide password" : "Show password"
+                          }
+                          onClick={() => setShowPassword2((v) => !v)}
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                          />
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                          />
-                        </svg>
-                      ) : (
-                        // New Eye-close icon
-                        <svg
-                          viewBox="0 0 22 20"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                          stroke="currentColor"
-                        >
-                          <path
-                            d="M9.58665 3.09232C9.99315 3.03223 10.4123 3 10.8441 3C15.9491 3 19.299 7.50484 20.4244 9.2868C20.5606 9.5025 20.6287 9.6103 20.6668 9.7767C20.6955 9.9016 20.6954 10.0987 20.6668 10.2236C20.6286 10.3899 20.5601 10.4985 20.4229 10.7156C20.123 11.1901 19.6659 11.8571 19.0602 12.5805M5.56807 4.71504C3.406 6.1817 1.9382 8.2194 1.26486 9.2853C1.12803 9.5019 1.05962 9.6102 1.02149 9.7765C0.992848 9.9014 0.992837 10.0984 1.02146 10.2234C1.05958 10.3897 1.12768 10.4975 1.26388 10.7132C2.38929 12.4952 5.73916 17 10.8441 17C12.9025 17 14.6756 16.2676 16.1325 15.2766M1.84417 1L19.8441 19M8.72285 7.87868C8.17995 8.4216 7.84417 9.1716 7.84417 10C7.84417 11.6569 9.18735 13 10.8441 13C11.6725 13 12.4225 12.6642 12.9654 12.1213"
-                            stroke="white"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      )}
-                    </button>
-                  </div>
+                          {showPassword2 ? (
+                            // Eye-off (you can keep your previous if you want)
+                            <svg
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                              />
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                              />
+                            </svg>
+                          ) : (
+                            // New Eye-close icon
+                            <svg
+                              viewBox="0 0 22 20"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                              stroke="currentColor"
+                            >
+                              <path
+                                d="M9.58665 3.09232C9.99315 3.03223 10.4123 3 10.8441 3C15.9491 3 19.299 7.50484 20.4244 9.2868C20.5606 9.5025 20.6287 9.6103 20.6668 9.7767C20.6955 9.9016 20.6954 10.0987 20.6668 10.2236C20.6286 10.3899 20.5601 10.4985 20.4229 10.7156C20.123 11.1901 19.6659 11.8571 19.0602 12.5805M5.56807 4.71504C3.406 6.1817 1.9382 8.2194 1.26486 9.2853C1.12803 9.5019 1.05962 9.6102 1.02149 9.7765C0.992848 9.9014 0.992837 10.0984 1.02146 10.2234C1.05958 10.3897 1.12768 10.4975 1.26388 10.7132C2.38929 12.4952 5.73916 17 10.8441 17C12.9025 17 14.6756 16.2676 16.1325 15.2766M1.84417 1L19.8441 19M8.72285 7.87868C8.17995 8.4216 7.84417 9.1716 7.84417 10C7.84417 11.6569 9.18735 13 10.8441 13C11.6725 13 12.4225 12.6642 12.9654 12.1213"
+                                stroke="white"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          )}
+                        </button>
+                      </div>
+                    </>
+                  )}
+
                   {/* Country Code */}
                   <label className="Login_label mt-4">Country Code</label>
                   <div className="mt-2 ">
@@ -676,7 +775,7 @@ const Profile = () => {
 
                   <div className="Login_submit-btn col-lg-12 mt-3">
                     <button className="Login_login-sim" type="submit">
-                      {isLoading ? "Updating..." : "Update Profile"}  
+                      {isLoading ? "Updating..." : "Update Profile"}
                     </button>
                   </div>
                 </div>

@@ -199,54 +199,56 @@ const Login = () => {
       .finally(() => setIsLoading(false));
   };
 
-  const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-
   const handleGoogleSuccess = async (credentialResponse) => {
     setIsLoading(true);
     try {
-      if (!credentialResponse?.credential) {
-        showSnackbar("Google login failed. No credentials received.", "error");
-        return;
-      }
-
       const decoded = jwtDecode(credentialResponse.credential);
 
+      // Prepare user data for backend
+      // const userData = {
+      //   email: decoded.email,
+      //   name: decoded.name,
+      //   picture: decoded.picture,
+      //   google_id: decoded.sub,
+      //   provider: "google",
+      // };
       const userData = {
-        email: decoded?.email,
-        username: decoded?.name,
-        profile_image: decoded?.picture,
-        provider: "google",
+        email: decoded.email,
+        username: decoded.name,
+        profile_image: decoded.picture,
       };
 
-      // console.log("Decoded Google User:", userData);
+      console.log(userData, credentialResponse.credential, decoded);
 
-      // Send to backend
-      const res = await apiFunctions.socialLogin(userData);
+      // // Send to backend for registration/storage
+      // const response = await apiFunctions.socialLogin(userData);
 
-      if (res?.status === 200 && res?.data?.token) {
-        showSnackbar("Login successful!", "success");
+      // if (response.data.success) {
+      //   // Add the new account to the list
+      //   const newAccount = {
+      //     email: decoded.email,
+      //     status: "connected",
+      //     hasIssue: false,
+      //     name: decoded.name,
+      //     picture: decoded.picture,
+      //   };
 
-        const decodedToken = jwtDecode(res.data.token);
+      //   setUserAccounts((prev) => [...prev, newAccount]);
+      //   setSelectedEmail(decoded.email);
+      //   setShowGoogleSignup(false);
 
-        localStorage.setItem("access-token", res.data.token);
-        localStorage.setItem("mail", decodedToken?.email || "");
+      //   // Refresh authentication status
+      //   fetch(`${API}/api/me`, { credentials: "include" })
+      //     .then((r) => r.json())
+      //     .then(setMe)
+      //     .catch(() => {});
 
-        setTimeout(() => navigate(pageRoutes.home), 3000);
-      } else if (res?.status === 403) {
-        showSnackbar(
-          res?.message || "Access denied. Your email is not allowed to log in.",
-          "error"
-        );
-        setTimeout(() => setOpenDialog(true), 1000);
-      } else {
-        showSnackbar("Invalid email or password", "error");
-      }
+      //   // Show success message
+      //   alert("Google account connected successfully!");
+      // }
     } catch (error) {
       console.error("Error registering Google user:", error);
-      showSnackbar(
-        "Failed to connect Google account. Please try again.",
-        "error"
-      );
+      alert("Failed to connect Google account. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -254,7 +256,7 @@ const Login = () => {
 
   const handleGoogleError = () => {
     console.error("Google login failed");
-    showSnackbar("Google login failed. Please try again.", "error");
+    alert("Google login failed. Please try again.");
   };
 
   // Auth0 (LinkedIn)
@@ -293,6 +295,9 @@ const Login = () => {
     });
   }, []);
 
+  const GOOGLE_CLIENT_ID =
+    import.meta.env.VITE_GOOGLE_CLIENT_ID ||
+    "805233841442-80suuco5ugfvmnh4lls683d2jaufrn77.apps.googleusercontent.com";
   return (
     <>
       <div className="container-fluid px-4 px-lg-0 Login-hero overflow-hidden">

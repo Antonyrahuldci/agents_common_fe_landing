@@ -186,7 +186,7 @@ const Land = () => {
           setProfileData(data);
           // setPreviewImage(appConstants?.imageUrl + data?.profileImage);
         } else {
-          console.log("No data found for Blog Count.");
+          // console.log("No data found for Blog Count.");
           setProfileData({});
         }
       })
@@ -259,7 +259,15 @@ const Land = () => {
                     cursor: "pointer",
                   }}
                   onClick={handleClick}
-                  src={appConstants?.imageUrl + profileData?.profileImage}
+                  src={
+                    profileData?.profileImage
+                      ? profileData.profileImage.includes(
+                          "googleusercontent.com"
+                        )
+                        ? profileData.profileImage
+                        : appConstants?.imageUrl + profileData.profileImage
+                      : undefined
+                  }
                 >
                   {profileData?.username?.charAt(0).toUpperCase()}
                 </Avatar>
@@ -374,7 +382,7 @@ const Land = () => {
               <p className="mb-0 p-0 w ms-2">Meet Your AI Agent Team</p>
             </div>
 
-            <div className="col-lg-7 mt-4 mb-5 text-center">
+            <div className="col-lg-7 mt-2 mb-5 text-center">
               <h1
                 className="w hero-txt mb-3"
                 data-aos="fade-up"
@@ -394,7 +402,7 @@ const Land = () => {
                 needs.
               </p>
               <div
-                className="text-center mt-4"
+                className="text-center mt-4 d-none d-md-block"
                 data-aos="fade-up"
                 data-aos-delay="600"
               >
@@ -414,7 +422,7 @@ const Land = () => {
         </div>
 
         <div
-          className="three-agents-overlay mt-5 pt-5 container px-lg-5 mx-lg-5"
+          className="three-agents-overlay mt-md-5 pt-md-5 container px-lg-5 mx-lg-5"
           id="three-agents-section"
         >
           <div className=" w-80">
@@ -427,7 +435,7 @@ const Land = () => {
                 organize more efficiently.
               </p>
             </div>
-            <div className="row my-lg-5 my-3">
+            <div className="row my-lg-5 g-3 my-3">
               {agentData?.map((agent, index) => (
                 <div
                   data-aos="zoom-in"
