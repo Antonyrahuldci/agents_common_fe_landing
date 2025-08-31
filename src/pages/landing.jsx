@@ -237,7 +237,10 @@ const Land = () => {
   return (
     <>
       <div className="container-fluid  px-lg-0 hero overflow-hidden p-0 m-0">
-        <div className="container top-nv d-flex justify-content-between py-4 px-4 px-lg-0">
+        <div
+          className="container top-nv d-flex justify-content-between py-4 px-4 px-lg-0"
+          id="header"
+        >
           <img
             src={logo}
             className="logo"
@@ -390,11 +393,30 @@ const Land = () => {
                 designed to handle your content, educational, and secretarial
                 needs.
               </p>
+              <div
+                className="text-center mt-4"
+                data-aos="fade-up"
+                data-aos-delay="600"
+              >
+                <button
+                  className="scroll-down-btn"
+                  onClick={() =>
+                    document
+                      .getElementById("three-agents-section")
+                      .scrollIntoView({ behavior: "smooth" })
+                  }
+                >
+                  ↓ Scroll Down
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="three-agents-overlay mt-5 pt-5 container px-lg-5 mx-lg-5">
+        <div
+          className="three-agents-overlay mt-5 pt-5 container px-lg-5 mx-lg-5"
+          id="three-agents-section"
+        >
           <div className=" w-80">
             <div className="ai-inter-text pb-2" data-aos="fade-up">
               <h6>
@@ -516,7 +538,15 @@ const Land = () => {
             <div className="foots-content row">
               <div className="simbli-foots  text-center">
                 <div className="simbli-logo">
-                  <img src={logo}></img>
+                  <img
+                    src={logo}
+                    style={{ cursor: "pointer" }}
+                    onClick={() =>
+                      document
+                        .getElementById("header")
+                        .scrollIntoView({ behavior: "smooth" })
+                    }
+                  ></img>
                 </div>
                 <div className="simbli-text ">
                   <p>

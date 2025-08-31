@@ -758,3 +758,41 @@ input.form-control-hero:-internal-autofill-selected {
     font-size: 12px;
   }
 }
+
+.scroll-down-btn {
+  border: 0.2px solid #376837;
+  background: linear-gradient(90deg,
+      rgba(24, 47, 24, 0.5) 0%,
+      rgba(29, 36, 29, 0.5) 100%);
+  color: #fff;
+  padding: 12px 24px;
+  font-size: 1rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  animation: floatUpDown 2s ease-in-out infinite;
+}
+
+
+.scroll-down-btn:hover {
+  background: rgba(41, 137, 57, 0.1);
+  border-color: #70e970;
+  color: #70e970;
+  animation-play-state: paused;
+  box-shadow: 0 0 10px rgba(112, 233, 112, 0.4);
+}
+
+/* Up & Down Floating Animation */
+@keyframes floatUpDown {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
