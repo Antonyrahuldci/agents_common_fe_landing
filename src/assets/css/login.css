@@ -230,7 +230,17 @@
     width: 100%;
     height: 44px;
     border: 0px;
+    transition: background 0.3s ease;
 }
+
+.Login_login-sim:disabled {
+    background: #b5b5b5;
+    /* override gradient */
+    color: #666;
+    /* optional: dim text color */
+    cursor: not-allowed;
+}
+
 
 .Login_simbli-line {
     width: 100%;
@@ -314,19 +324,19 @@
     }
 }
 
-.nsm7Bb-HzV7m-LgbsSe {
-    width: 100%;
-    height: 38px;
+/* .nsm7Bb-HzV7m-LgbsSe {
+    width: 100% !important;
+    height: 38px !important;
     border-radius: 9px !important;
-    border: 0px;
+    border: 0px !important;
     border: 1px solid #262626 !important;
     color: #ffff !important;
-    font-size: 15px;
+    font-size: 15px !important;
     background: #0f0f0f !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-}
+} */
 
 .Simbli_h5 {
     font-weight: bold;

@@ -76,9 +76,10 @@ const Land = () => {
       return;
     }
 
-    const baseUrl = url.startsWith("http")
+    const baseUrl = url.startsWith("https")
       ? url
       : `http://localhost:5174${url}`;
+
     const childUrl = `${baseUrl}?token=${encodeURIComponent(
       token
     )}&email=${encodeURIComponent(email)}`;

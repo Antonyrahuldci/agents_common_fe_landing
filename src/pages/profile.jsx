@@ -730,6 +730,10 @@ const Profile = () => {
                             }));
                           }}
                         >
+                          {/* Default placeholder */}
+                          <option value="" disabled>
+                            Select Country Code
+                          </option>
                           {countries.map((c) => (
                             <option key={c.code} value={c.code}>
                               {c.flag} {c.code}

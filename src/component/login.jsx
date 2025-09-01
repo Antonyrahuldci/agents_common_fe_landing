@@ -131,7 +131,7 @@ const Login = () => {
       // console.log("response", res);
 
       if (res?.status === 200 && res?.data?.token) {
-        showSnackbar("Login successfully!", "success");
+        showSnackbar("Logged in successfully!", "success");
 
         // // ✅ Decrypt the token
         // const decryptedBytes = CryptoJS.AES.decrypt(
@@ -409,10 +409,10 @@ const Login = () => {
 
               <div className="col-lg-12 col-12 mt-lg-0 mt-4">
                 <div className="Login_form-overlay-login text-lg-left ">
-                  <h6 className="Login_form-h6">
+                  <h6 className="Login_form-h6 text-center">
                     {isSignupMode ? "Sign Up" : "Login"}{" "}
                   </h6>
-                  <p className="form-p mb-0">
+                  <p className="form-p mb-0 text-center">
                     {" "}
                     {isSignupMode
                       ? "Create your account to get started."
@@ -569,7 +569,11 @@ const Login = () => {
                   </div>
 
                   <div className="Login_submit-btn col-lg-12 mt-4">
-                    <button className="Login_login-sim" type="submit">
+                    <button
+                      className="Login_login-sim"
+                      type="submit"
+                      disabled={isLoading}
+                    >
                       {isSignupMode ? "Sign Up" : "Sign In"}
                     </button>
                     <p
@@ -607,43 +611,21 @@ const Login = () => {
                 </div>
 
                 {/* social login */}
-                <div className="Login_social-logins mt-2">
+                <div className="mt-2">
                   <div className="row">
-                    <div className=" col-12">
-                      {/* <GoogleOAuthProvider
-                        clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
-                      >
-                        <GoogleLogin
-                          onSuccess={handleSuccess}
-                          onError={handleError}
-                        />
-                      </GoogleOAuthProvider> */}
+                    <div className="col-12 d-flex align-item-center justify-content-center">
                       <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
                         <GoogleLogin
                           onSuccess={handleGoogleSuccess}
                           onError={handleGoogleError}
-                          useOneTap
-                          theme="filled_blue"
+                          useOneTap={false}
+                          theme="dark"
                           size="large"
-                          text="signin_with"
-                          shape="rectangular"
+                          text="continue_with"
+                          shape="pill"
                         />
                       </GoogleOAuthProvider>
                     </div>
-                    {/* <div className="col-lg-6 col-6">
-                      <button
-                        className="Login_microsoft-btn "
-                        onClick={handleLinkedInLogin}
-                      >
-                        {" "}
-                        <img
-                          src={social2}
-                          alt="social"
-                          className="Login_google-login me-1"
-                        />
-                        LinkedIn
-                      </button>
-                    </div> */}
                   </div>
                 </div>
               </div>
