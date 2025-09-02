@@ -76,7 +76,7 @@ const Land = () => {
       return;
     }
 
-    const baseUrl = url.startsWith("https")
+    const baseUrl = url.startsWith("http")
       ? url
       : `http://localhost:5174${url}`;
 
@@ -408,7 +408,7 @@ const Land = () => {
                 data-aos-delay="600"
               >
                 <button
-                  className="scroll-down-btn"
+                  className="scroll-down-btn mt-5"
                   onClick={() =>
                     document
                       .getElementById("three-agents-section")
@@ -432,7 +432,7 @@ const Land = () => {
                 Introducing Your <span className="fw-bold c1">AI Experts</span>
               </h6>
               <p data-aos="fade-up">
-                Three AI agents, each designed to help you create, learn &
+                Two AI agents, each designed to help you create, learn &
                 organize more efficiently.
               </p>
             </div>

@@ -263,7 +263,7 @@ const Profile = () => {
             alt="logo"
             onClick={() => navigate(pageRoutes?.home)}
           />
-          <div className="d-flex gap-3">
+          <div className="d-flex gap-md-3 gap-2">
             {/* Youtube */}
             <a
               href="https://www.youtube.com/@Simbli-ai"
@@ -353,7 +353,7 @@ const Profile = () => {
           data-aos="fade-in"
           className="container d-flex align-items-center justify-content-center p-0 mt-lg-5 mt-5"
         >
-          <div className="Login_form-overlay py-4 pe-4 ps-1 col-lg-9 ">
+          <div className="Login_form-overlay  mx-3 py-4 pe-md-4 ps-md-1 col-lg-9 Profile_Mob">
             <div className="container">
               <form
                 className="row g-3"
@@ -385,7 +385,7 @@ const Profile = () => {
                       <span style={{ color: "#54c754" }}>Profile</span>
                     </h4>
                   </div>
-                  <div className="jesica-img-card text-center">
+                  <div className="jesica-img-card text-center Jessica_Mob">
                     <div className="jesica-img">
                       <img src={getProfileImage()} alt="profile" />
 
@@ -418,7 +418,7 @@ const Profile = () => {
                         onChange={handleImageChange}
                       />
                     </div>
-                    <div className="jesica-text mt-4">
+                    <div className="jesica-text mt-md-4">
                       <h1 className="mb-0">{profileData?.username}</h1>
                       <p className="mb-0">{profileData?.email}</p>
                       <p className="pt-1">
@@ -717,7 +717,7 @@ const Profile = () => {
                     <div className="row ">
                       <div className=" Country_Code1">
                         <select
-                          className=" Country_In form-select p-2 rounded Login_input-field"
+                          className=" Country_In form-select p-2 rounded "
                           value={formData?.countrycode || ""}
                           onChange={(e) => {
                             const country = countries.find(
@@ -732,7 +732,7 @@ const Profile = () => {
                         >
                           {/* Default placeholder */}
                           <option value="" disabled>
-                            Select Country Code
+                            --
                           </option>
                           {countries.map((c) => (
                             <option key={c.code} value={c.code}>

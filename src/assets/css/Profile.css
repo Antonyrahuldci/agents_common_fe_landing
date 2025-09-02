@@ -415,3 +415,95 @@
     color: #58c958;
     margin-bottom: 5px;
 }
+
+@media (max-width: 600px) {
+    .Jessica_Mob {
+        display: flex;
+        flex-direction: column !important;
+    }
+
+    .Profile_Mob {
+        max-height: 75vh;
+        overflow-y: auto;
+    }
+
+    .Country_Code1 {
+        width: 32% !important;
+    }
+
+    .Country_Code2 {
+        width: 68%;
+    }
+
+    .Login_Field {
+        padding: 0 25px 0 48px !important;
+    }
+
+    /* Hide the actual placeholder text */
+    .Login_Field::placeholder {
+        color: transparent;
+    }
+
+    /* Input base styling (adjust as per your design) */
+    .Login_Field {
+        background-origin: content-box;
+        background-clip: content-box;
+    }
+
+    /* Show animated fake placeholder ONLY when input is empty */
+    .Login_Field:placeholder-shown {
+        /* Custom properties */
+        --ph-w: 600px;
+        /* Width of the repeating tile */
+        --ph-h: 20px;
+        /* Height of text line */
+        --ph-speed: 8s;
+        /* Animation duration */
+        --ph-color: %23999;
+        /* URL-encoded #999 */
+
+        /* Inline SVG that contains the text */
+        background-image: url("data:image/svg+xml;utf8,\<svg xmlns='http://www.w3.org/2000/svg' width='600' height='20'>\<text x='0' y='15'  font-family='Arial, sans-serif' fill='%23999'>Enter The Mobile Number</text>\</svg>");
+
+        background-repeat: repeat-x;
+        background-size: var(--ph-w) var(--ph-h);
+        background-position: 0 50%;
+        animation: ph-marquee var(--ph-speed) linear infinite;
+    }
+
+    /* Remove fake placeholder once user types */
+    .Login_Field:not(:placeholder-shown) {
+        background-image: none;
+    }
+
+    /* Keyframes for marquee effect (left → right) */
+    @keyframes ph-marquee {
+        from {
+            background-position: 0 50%;
+        }
+
+        to {
+            background-position: calc(-1 * var(--ph-w)) 50%;
+        }
+    }
+
+}
+
+.Country_In {
+    white-space: nowrap;
+    /* prevent text from wrapping */
+    overflow: hidden;
+    /* hide overflowing text */
+    text-overflow: ellipsis;
+    /* show ... when text is too long */
+    display: block;
+    /* needed for ellipsis */
+    max-width: 100%;
+    /* respect container width */
+    border: 1.5px solid #3a3f3e !important;
+    background-color: #111514;
+    box-shadow: none !important;
+    cursor: pointer;
+    color: #ffffff !important;
+    --bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+}
