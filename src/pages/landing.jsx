@@ -72,7 +72,8 @@ const Land = () => {
     const email = localStorage.getItem("mail");
 
     if (!token) {
-      navigate(pageRoutes?.login);
+      // navigate(pageRoutes?.login);
+      navigate(pageRoutes?.login, { state: { redirectUrl: url } });
       return;
     }
 
@@ -621,9 +622,35 @@ const Land = () => {
           </div>
         </div>
         <div className="year-copy container-fluid p-0 m-0 py-2">
-          <p className="mb-0 pb-0 text-center">
-            © 2025 Simbli. All rights reserved. Built with human-like AI.
-          </p>
+          <div className="d-flex justify-content-between align-items-center px-3">
+            {/* Left side */}
+            <p className="mb-0 pb-0 text-start ">
+              © 2025 Simbli. All rights reserved. Built with human-like AI.
+            </p>
+
+            {/* Right side */}
+            {/* Right side */}
+            <div className="d-flex gap-3">
+              <a
+                href="http://localhost:5173/privacypolicy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mb-0 pb-0 text-white"
+                style={{ textDecoration: "none" }}
+              >
+                Privacy Policy
+              </a>
+              <a
+                href="http://localhost:5173/termsandconditons"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mb-0 pb-0 text-white"
+                style={{ textDecoration: "none" }}
+              >
+                Terms and Conditions
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </>

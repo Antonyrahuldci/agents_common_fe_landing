@@ -14,7 +14,7 @@ import social2 from "../assets/images/linkedin1.png";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { useAuth0 } from "@auth0/auth0-react";
 import { connections } from "../api/auth0Config";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import apiFunctions from "../api/apiFunctions";
 import CryptoJS from "crypto-js";
 import { jwtDecode } from "jwt-decode";
@@ -115,6 +115,8 @@ const Login = () => {
   };
 
   const navigate = useNavigate();
+  const location = useLocation();
+  const redirectUrl = location.state?.redirectUrl;
 
   const handleEmailLogin = async (e) => {
     e.preventDefault();
@@ -153,7 +155,25 @@ const Login = () => {
         localStorage.setItem("mail", decodedToken?.email || "");
 
         // ✅ Redirect to home page after success
-        setTimeout(() => navigate(pageRoutes.home), 3000);
+        // setTimeout(() => navigate(pageRoutes.home), 3000);
+        setTimeout(() => {
+          if (redirectUrl) {
+            const token = res.data.token;
+            const email = decodedToken?.email || "";
+
+            const baseUrl = redirectUrl.startsWith("http")
+              ? redirectUrl
+              : `http://localhost:5174${redirectUrl}`;
+
+            const childUrl = `${baseUrl}?token=${encodeURIComponent(
+              token
+            )}&email=${encodeURIComponent(email)}`;
+
+            window.location.href = childUrl; // ✅ Redirect with token + email
+          } else {
+            navigate(pageRoutes.home);
+          }
+        }, 1000);
       } else if (res.status === 403) {
         showSnackbar(
           res.message || "Access denied. Your email is not allowed to log in.",

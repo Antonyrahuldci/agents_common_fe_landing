@@ -12,9 +12,9 @@ import VerifyPage from "./component/verify";
 import Logout from "./pages/Logout";
 import { useEffect } from "react";
 import axios from "axios";
-
+import TermsAndConditions from "./pages/Terms";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 function App() {
-
   return (
     // <Router>
     //   <TokenMonitor />
@@ -34,6 +34,17 @@ function App() {
         <Route path="/logout" element={<Logout />} />
         <Route index path={pageRoutes?.home} element={<Land />} />
         <Route index path={pageRoutes?.login} element={<Login />} />
+        <Route index path={pageRoutes?.verify} element={<VerifyPage />} />
+        <Route
+          index
+          path={pageRoutes?.privacypolicy}
+          element={<PrivacyPolicy />}
+        />
+        <Route
+          index
+          path={pageRoutes?.termsandconditons}
+          element={<TermsAndConditions />}
+        />
         <Route index path={pageRoutes?.verify} element={<VerifyPage />} />
         <Route element={<ProtectedRoute />}>
           <Route path={pageRoutes?.profile} element={<Profile />} />

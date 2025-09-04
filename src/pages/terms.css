@@ -1,0 +1,87 @@
+:root {
+    /* --c1:#3b8346;  */
+    --c1: #95d689;
+
+}
+
+.c1 {
+    color: var(--c1) !important;
+}
+
+.w {
+    color: #ffffff !important;
+}
+
+.w2 {
+    color: #a0a0a0;
+}
+
+.terms {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(90.76deg, #000000 17.93%, #0a290a 100%);
+    background-position: center;
+    background-size: contain;
+    position: relative;
+    background-repeat: repeat;
+}
+
+/* ------ mobile responsive -------- */
+@media screen and (max-width:1024px) {}
+
+/* === tab === */
+@media screen and (max-width:920px) {}
+
+/* ==== mobile === */
+@media screen and (max-width:620px) {
+    .logo {
+        width: 30%;
+    }
+
+
+}
+
+/* privacy */
+
+.privacy-policy-sim {
+    color: #ffffff;
+    font-size: 35px;
+    font-weight: 700;
+}
+
+.privacy-policy-p {
+    color: #fff;
+    font-size: 16px;
+}
+
+.privacy-policy-h4 {
+    color: #fff;
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.privacy-policy-h5 {
+    font-size: 25px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.privacy-policy-h6 {
+    font-size: 23px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.privacy-policy-span {
+    font-size: 19px;
+    color: #fff;
+    font-weight: 600;
+}
+
+.li-compy {
+    color: #fff;
+    font-size: 15px;
+}
